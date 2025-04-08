@@ -11,6 +11,8 @@ CREATE DATABASE 330_project_research;
 
 USE 330_project_research;
 
+
+-- Users
 CREATE TABLE users (
     userID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
@@ -21,12 +23,22 @@ CREATE TABLE users (
 
 ALTER TABLE users AUTO_INCREMENT = 100;
 
+INSERT INTO users (username, password, email) VALUES ('', '', '');
+
+
+
+-- Interests
 CREATE TABLE interests (
     interestID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     description VARCHAR(50) NOT NULL,
     PRIMARY KEY (interestID)
 );
 
+INSERT INTO interests (description) VALUES ('');
+
+
+
+-- User Interests
 CREATE TABLE user_interests (
     userID INT UNSIGNED NOT NULL,
     interestID INT UNSIGNED NOT NULL,
@@ -35,12 +47,22 @@ CREATE TABLE user_interests (
     CONSTRAINT user_interests_FK FOREIGN KEY (interestID) REFERENCES interests(interestID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+INSERT INTO user_interets (userID, interestID) VALUES (0);
+
+
+
+-- Department
 CREATE TABLE departments (
     departmentID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(100),
     PRIMARY KEY (departmentID)
 );
 
+INSERT INTO departments (name) VALUES ('');
+
+
+
+-- Faculty
 CREATE TABLE faculty (
     userID INT UNSIGNED NOT NULL,
     departmentID INT UNSIGNED NOT NULL,
@@ -52,6 +74,11 @@ CREATE TABLE faculty (
     CONSTRAINT faculty_departmentID_FK FOREIGN KEY (departmentID) REFERENCES departments(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+INSERT INTO faculty (userID, departmentID, firstName, lastName, abstract) VALUES(0, 0, '');
+
+
+
+-- Students
 CREATE TABLE students (
     userID INT UNSIGNED NOT NULL,
     categoryYear ENUM('freshman', 'sophomore', 'junior', 'senior') NOT NULL,
@@ -64,6 +91,10 @@ CREATE TABLE students (
     CONSTRAINT chk_categoryYear CHECK (categoryYear IN ('freshman', 'sophomore', 'junior', 'senior'))
 );
 
+INSERT INTO students (userID, categoryYear, departmentID, firstName, lastName) VALUES (0, '', 0, '', ''),;
+
+
+-- Community Users
 CREATE TABLE community_users (
     userID INT UNSIGNED NOT NULL,
     name VARCHAR(50) NOT NULL DEFAULT '',
@@ -71,6 +102,11 @@ CREATE TABLE community_users (
     CONSTRAINT community_user_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+INSERT INTO community_users (userID, name) VALUES (0, '');
+
+
+
+-- Projects
 CREATE TABLE projects (
     projectID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     userID INT UNSIGNED NOT NULL,
@@ -80,6 +116,11 @@ CREATE TABLE projects (
     CONSTRAINT project_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+INSERT INTO projects (userID, name, description) VALUES (0, '', '');
+
+
+
+-- Project Interests
 CREATE TABLE project_interests (
     projectID INT UNSIGNED NOT NULL,
     interestID INT UNSIGNED NOT NULL,
@@ -87,3 +128,5 @@ CREATE TABLE project_interests (
     CONSTRAINT projectID_FK FOREIGN KEY (projectID) REFERENCES projects(projectID),
     CONSTRAINT interestID_FK FOREIGN KEY (interestID) REFERENCES interests(interestID) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+INSERT INTO project_interests (projectID, interestID) VALUES (0, 0);
