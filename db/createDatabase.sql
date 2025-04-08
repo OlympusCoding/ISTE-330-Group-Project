@@ -15,7 +15,7 @@ CREATE TABLE users (
     userID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    email VARCHAR(50) NULL DEFAULT NULL,
+    email VARCHAR(100) NULL DEFAULT NULL,
     PRIMARY KEY (userID)
 );
 
@@ -23,7 +23,7 @@ ALTER TABLE users AUTO_INCREMENT = 100;
 
 CREATE TABLE interests (
     interestID INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    description VARCHAR(50) NOT NULL DEFAULT '',
+    description VARCHAR(50) NOT NULL,
     PRIMARY KEY (interestID)
 );
 
@@ -74,9 +74,9 @@ CREATE TABLE community_users (
 CREATE TABLE projects (
     projectID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     userID INT UNSIGNED NOT NULL,
-    name VARCHAR(50)NOT NULL DEFAULT '',
+    name VARCHAR(50) NOT NULL DEFAULT '',
     description VARCHAR(255) NOT NULL DEFAULT '',
-    PRIMARY KEY (projectID, userID),
+    PRIMARY KEY (projectID),
     CONSTRAINT project_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
