@@ -23,7 +23,6 @@ CREATE TABLE users (
 
 ALTER TABLE users AUTO_INCREMENT = 100;
 
-INSERT INTO users (username, password, email) VALUES ('', '', '');
 
 
 
@@ -34,7 +33,6 @@ CREATE TABLE interests (
     PRIMARY KEY (interestID)
 );
 
-INSERT INTO interests (description) VALUES ('');
 
 
 
@@ -47,7 +45,6 @@ CREATE TABLE user_interests (
     CONSTRAINT user_interests_FK FOREIGN KEY (interestID) REFERENCES interests(interestID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO user_interets (userID, interestID) VALUES (0);
 
 
 
@@ -58,7 +55,6 @@ CREATE TABLE departments (
     PRIMARY KEY (departmentID)
 );
 
-INSERT INTO departments (name) VALUES ('');
 
 
 
@@ -74,7 +70,6 @@ CREATE TABLE faculty (
     CONSTRAINT faculty_departmentID_FK FOREIGN KEY (departmentID) REFERENCES departments(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO faculty (userID, departmentID, firstName, lastName, abstract) VALUES(0, 0, '');
 
 
 
@@ -102,7 +97,6 @@ CREATE TABLE community_users (
     CONSTRAINT community_user_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO community_users (userID, name) VALUES (0, '');
 
 
 
@@ -116,7 +110,6 @@ CREATE TABLE projects (
     CONSTRAINT project_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO projects (userID, name, description) VALUES (0, '', '');
 
 
 
@@ -129,4 +122,3 @@ CREATE TABLE project_interests (
     CONSTRAINT interestID_FK FOREIGN KEY (interestID) REFERENCES interests(interestID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO project_interests (projectID, interestID) VALUES (0, 0);
