@@ -34,6 +34,7 @@ VALUES
 
 
 
+
 -- Interests
 INSERT INTO 
     interests (description) 

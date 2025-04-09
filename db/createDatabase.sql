@@ -18,6 +18,7 @@ CREATE TABLE users (
     username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NULL DEFAULT NULL,
+    userType ENUM("Faculty", "Student", "Community"),
     PRIMARY KEY (userID)
 );
 
