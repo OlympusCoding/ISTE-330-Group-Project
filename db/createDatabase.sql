@@ -53,6 +53,7 @@ CREATE TABLE user_interests (
 CREATE TABLE departments (
     departmentID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(100),
+    abbreviation CHAR(10) DEFAULT NULL,
     PRIMARY KEY (departmentID)
 );
 
