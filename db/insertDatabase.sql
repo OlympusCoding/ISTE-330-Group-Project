@@ -45,7 +45,18 @@ VALUES
     ('Chemistry',) -- scms
     ('Biochemistry'), -- scms
     ('Accounting'), -- fad
-    ('Finance'); -- fad
+    ('Finance'), -- fad
+    ('Artificial Intelligence'),
+    ('Machine Learning'),
+    ('Data Science'),
+    ('Cybersecurity'),
+    ('Human-Computer Interaction'),
+    ('Computer Networks'),
+    ('Database Systems'),
+    ('Web Development'),
+    ('Computer Graphics'),
+    ('Cloud Computing');
+    
 
 
 -- User Interests
@@ -57,12 +68,19 @@ VALUES
 
 -- Department
 INSERT INTO 
-    departments (name) 
+    departments (name, abbreviation) 
 VALUES 
-    ('Finance and Accounting Department'), -- fad
-    ('Department of Software Engineering'), -- dse
-    ('School of Chemistry and Materials Science'), -- scms
-    ('School of Art'); -- sa
+    ('College of Art and Design','CAD'),
+    ('College of Engineering Technology','CET'),
+    ('College of Health Sciences and Technology','CHST'),
+    ('College of Liberal Arts','COLA'),
+    ('College of Science','COS'),
+    ('Golisano College of Computing and Information Sciences','GCCIS'),
+    ('Golisano Institute for Sustainability','GIS'),
+    ('Kate Gleason College of Engineering','KGCOE'),
+    ('National Technical Institute for the Deaf','NTID'),
+    ('Saunders College of Business','SCOB'),
+    ('School of Individualized Study','SOIS');
 
 
 -- Faculty
