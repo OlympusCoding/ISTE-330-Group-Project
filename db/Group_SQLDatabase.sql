@@ -5,6 +5,7 @@
 -- Date: 04/19/25
 -- Version: 1.0
 
+
 DROP DATABASE IF EXISTS 330_project_research;
 
 CREATE DATABASE 330_project_research;
@@ -111,3 +112,4 @@ CREATE TABLE projects (
     PRIMARY KEY (projectID),
     CONSTRAINT project_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
