@@ -132,4 +132,10 @@ VALUES
 INSERT INTO 
     projects (userID, name, description) 
 VALUES 
-    (0, '', '');
+    (100, 'Secure AI', 'Use AI to detect cyber treats'),
+    (101, 'Web Tools', 'Compare React and Vue performance'),
+    (102, 'Smart Campus', 'Link campus tech using IoT'),
+    (103, 'Stock ML', 'ML Model for stock prediction'),
+    (104, 'Green Chem', 'Make eco-frendly lab materials');
+    (105, 'ASL App', 'App to teach ASL basics'),
+    (106, 'Robot Arm', 'AI for object sorting task');
