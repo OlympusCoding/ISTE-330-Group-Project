@@ -4,6 +4,7 @@ import types.enums.CategoryYear;
 
 public class Student extends UserTypeInfo {
     
+    private String userType = "student";
     private CategoryYear categoryYear;
     private int departmentID;
     private String firstName;
@@ -16,4 +17,25 @@ public class Student extends UserTypeInfo {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public CategoryYear getCategoryYear() {
+        return categoryYear;
+    }
+
+    public int getDepartmentID() {
+        return departmentID;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+    
 }

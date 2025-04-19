@@ -21,6 +21,31 @@ public class UserParams
         this.userType = userType;
         this.userTypeInfo = userTypeInfo;
     }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public UserTypeInfo getUserTypeInfo() {
+        return userTypeInfo;
+    }
+    
 }
 
 

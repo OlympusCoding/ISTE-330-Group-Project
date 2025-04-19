@@ -2,6 +2,7 @@ package types.user.userTypes;
 
 public class Faculty extends UserTypeInfo {
     
+    private String userType = "faculty";
     private int departmentID;
     private String firstName;
     private String lastName;
@@ -16,4 +17,20 @@ public class Faculty extends UserTypeInfo {
         this.lastName = lastName;
         this.facultyAbstract = facultyAbstract;
     }
+    public String getUserType() {
+        return userType;
+    }
+    public int getDepartmentID() {
+        return departmentID;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public String getFacultyAbstract() {
+        return facultyAbstract;
+    }
+    
 }

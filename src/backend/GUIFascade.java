@@ -2,6 +2,7 @@ package backend;
 
 import java.util.List;
 
+import types.enums.UserType;
 import types.user.UserParams;
 import types.user.userTypes.*;
 
@@ -25,58 +26,71 @@ public class GUIFascade {
         // Use Datalayer to access database entry of user based on username
         // If User does not exist, return false
 
-
         // Encrypt password param to test against stored password
         // If Passwords do not match, return false
 
         // If all parts match the user, return true
-        return true;
+
+        // Are we encrypting before the function or during?
+
+        if(dataLayer.checkUsername(username)){
+            if(dataLayer.checkPassword(username, password)){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean Register(UserParams params)
     {
         // Create New User with all sub types etc
-        return true;
+        return dataLayer.addUser(params);
     }
 
-    public boolean ChangeUserFullname()
+    public boolean ChangeUserFullname(int userID, String firstName, String lastName)
     {
-        ChangeUserFirstName();
-        ChangeUserLastname();
-        return true;
+        if(ChangeUserFirstName(userID, firstName)){
+            if(ChangeUserLastname(userID, lastName)){
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean ChangeUserFirstName()
+    public boolean ChangeUserFirstName(int userID, String newName)
     {
-        return true;
+        return dataLayer.updateFirstName(userID, newName);
+
     }
 
-    public boolean ChangeUserLastname()
+    public boolean ChangeUserLastname(int userID, String newName)
     {
-        return true;
+        return dataLayer.updateLastName(userID, newName);
     }
 
-    public boolean ChangePassword()
+    public boolean ChangePassword(int userID, String oldPass, String newPass)
     {
-        // Requires knowing old password to change password
-        return true;
+        String username = dataLayer.getUserUsername(userID);
+        if(dataLayer.checkPassword(username, oldPass)){
+            return dataLayer.updatePassword(userID, newPass);
+        }
+        return false;
     }
 
-    public boolean AddFacultyAbstract()
+    public boolean AddFacultyAbstract(int userId, String abstractText)
     {
-        // Adds a new abstract to a faculty member
-        return true;
+        return dataLayer.addAbstract(userId, abstractText);
     }
 
-    public boolean UpdateFacultyAbstract()
+    public boolean UpdateFacultyAbstract(int userId, String abstractText)
     {
-        // Updates an existing abstract of a faculty member(s)
-        return true;
+        return dataLayer.updateAbstract(userId, abstractText);
     }
 
-    public boolean RemoveFacultyAbstract()
+    public boolean RemoveFacultyAbstract(int userId)
     {
-        // Removes a faculty member from an abstract
+        dataLayer.removeAbstract(userId);
         return true;
     }
 
@@ -89,6 +103,8 @@ public class GUIFascade {
     public boolean UpdateFacultyInterest()
     {
         // Updates an existing Faculty Interest
+
+        // Do we need to update interests?
         return true;
     }
 
@@ -98,25 +114,23 @@ public class GUIFascade {
         return true;
     }
 
-    public boolean CreateProject()
+    public boolean CreateProject(int userId, String projectname, String description)
     {
-        // Creates a new project
-        return true;
+        return dataLayer.addProject(userId, projectname, description);
     }
 
-    public boolean UpdateProject()
+    public boolean UpdateProjectName(int userId, String name)
     {
         // Updates a Project
-        return true;
+
+        return dataLayer.updateProjectName(userId, name);
     }
 
-    public boolean DeleteProject()
+    public boolean DeleteProject(int projectId)
     {
         // Deletes a project
-        return true;
+        return dataLayer.removeProject(projectId);
     }
-
-    // Project Interests??
 
     public List<Student> SearchForStudentByInterest()
     {
