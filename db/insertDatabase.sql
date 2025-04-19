@@ -105,8 +105,13 @@ VALUES
 INSERT INTO 
     students (userID, categoryYear, departmentID, firstName, lastName) 
 VALUES 
-    (0, '', 0, '', ''),;
-
+    (100, 'Senior', 6, 'Flavio', 'Medina'),
+    (101, 'Senior', 6, 'Charles', 'Coleman'),
+    (102, 'Freshman', 7, 'Sean', 'Guyon'),
+    (103, 'Junior', 2, 'Will', 'Jacobs'),
+    (104, 'Junior', 3, 'David', 'Kalinowski'),
+    (105, 'Sophomore', 9, 'John', 'Doe'),
+    (106, 'Senior', 8, 'Jane', 'Smith');
 
 -- Community Users
 INSERT INTO    
