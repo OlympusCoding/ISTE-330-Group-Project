@@ -30,7 +30,7 @@ VALUES
     ('johndoe', 'student6', 'johndoe@rit.edu'),    
 
     -- userID: 106 
-    ('tigersrit', 'student7', 'tigersrit@rit.edu');     
+    ('janesmith', 'student7', 'janesmith@rit.edu');     
 
 
 
@@ -42,7 +42,7 @@ VALUES
     ('Software Engineering'), -- dse
     ('Data Science'), -- dse
     ('Studio Arts'), -- sa
-    ('Chemistry',) -- scms
+    ('Chemistry'), -- scms
     ('Biochemistry'), -- scms
     ('Accounting'), -- fad
     ('Finance'), -- fad
@@ -63,7 +63,13 @@ VALUES
 INSERT INTO 
     user_interets (userID, interestID) 
 VALUES 
-    (50, 1);
+    (100, 1),
+    (101, 2),
+    (102, 8),
+    (103, 9),
+    (104, 4),
+    (105, 6),
+    (105, 3);
 
 
 -- Department
@@ -84,20 +90,33 @@ VALUES
 
 
 -- Faculty
-INSERT INTO faculty (userID, departmentID, firstName, lastName, abstract) VALUES(0, 0, '');
-
+INSERT INTO 
+    faculty(userID, departmentID, firstName, lastName, abstract) 
+VALUES
+    (100, 6, 'Flavio', 'Medina', 'AI and Cybersecurity expert'),
+    (101, 6, 'Charles', 'Coleman', 'Web Development and Software Frameworks'),
+    (102, 7, 'Sean', 'Guyon', 'Cloud Computing and IoT'),
+    (103, 2, 'Will', 'Jacobs', 'Data Analytics and Machine Learning'),
+    (104, 3, 'David', 'Kalinowski', 'Sustainable Biochemistry Processes'),
+    (105, 9, 'John', 'Doe', 'Accessibility tech for Deaf students'),
+    (106, 8, 'Jane', 'Smith', 'AI and Robotics');
 
 -- Students
-INSERT INTO students (userID, categoryYear, departmentID, firstName, lastName) VALUES (0, '', 0, '', ''),;
+INSERT INTO 
+    students (userID, categoryYear, departmentID, firstName, lastName) 
+VALUES 
+    (0, '', 0, '', ''),;
 
 
 -- Community Users
-INSERT INTO community_users (userID, name) VALUES (0, '');
+INSERT INTO    
+    community_users (userID, name) 
+VALUES 
+    (0, '');
 
 
 -- Projects
-INSERT INTO projects (userID, name, description) VALUES (0, '', '');
-
-
--- Project Interests
-INSERT INTO project_interests (projectID, interestID) VALUES (0, 0);
+INSERT INTO 
+    projects (userID, name, description) 
+VALUES 
+    (0, '', '');
