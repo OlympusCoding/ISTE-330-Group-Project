@@ -117,7 +117,15 @@ VALUES
 INSERT INTO    
     community_users (userID, name) 
 VALUES 
-    (0, '');
+    (107, 'Emma Kang'),
+    (108, 'Peter Parker'),
+    (109, 'Steve Rogers'),
+    (110, 'Tony Stark'),
+    (111, 'Jim Goods'),
+    (112, 'Denis Fire'),
+    (113, 'Elon Musk'),
+    (114, 'LeBron James'),
+    (115, 'Stephen Curry');
 
 
 -- Projects
