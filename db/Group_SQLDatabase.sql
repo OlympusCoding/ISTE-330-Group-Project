@@ -54,8 +54,6 @@ CREATE TABLE faculty (
     firstName VARCHAR(50) DEFAULT NULL,
     lastName VARCHAR(50) DEFAULT NULL,
     abstract VARCHAR(200) DEFAULT NULL,
-    buildingNum VARCHAR(50) DEFAULT NULL, 
-    officeNum VARCHAR(50) DEFAULT NULL,
     PRIMARY KEY (userID, departmentID),
     CONSTRAINT faculty_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT faculty_departmentID_FK FOREIGN KEY (departmentID) REFERENCES departments(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -74,14 +72,12 @@ CREATE TABLE students (
     CONSTRAINT chk_categoryYear CHECK (categoryYear IN ('freshman', 'sophomore', 'junior', 'senior'))
 );
 
-INSERT INTO students (userID, categoryYear, departmentID, firstName, lastName) VALUES (0, '', 0, '', '');
-
 -- Community Users
 CREATE TABLE community_users (
     userID INT UNSIGNED NOT NULL,
     name VARCHAR(50) NOT NULL DEFAULT '',
     PRIMARY KEY (userID),
-    CONSTRAINT community_user_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT community_user_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Projects
@@ -162,15 +158,13 @@ VALUES
 
 -- Faculty
 INSERT INTO 
-    faculty(userID, departmentID, firstName, lastName, abstract, buildingNum, officeNum) 
+    faculty(userID, departmentID, firstName, lastName, abstract) 
 VALUES
-    (100, 6, 'Flavio', 'Medina', 'AI and Cybersecurity expert', 'Building 70', 'Room 470'),
-    (101, 6, 'Charles', 'Coleman', 'Web Development and Software Frameworks', 'Building 70', 'Room 240'),
-    (102, 7, 'Sean', 'Guyon', 'Cloud Computing and IoT', 'Building 81', 'Room 370'),
-    (103, 2, 'Will', 'Jacobs', 'Data Analytics and Machine Learning', 'Building 82', 'Room 210'),
-    (104, 3, 'David', 'Kalinowski', 'Sustainable Biochemistry Processes', 'Building 76', 'Room 50'),
-    (105, 9, 'John', 'Doe', 'Accessibility tech for Deaf students', 'Building 60', 'Room 340'),
-    (106, 8, 'Jane', 'Smith', 'AI and Robotics', 'Building 9', 'Room 115');
+    (100, 6, 'Flavio', 'Medina', 'AI and Cybersecurity expert'),
+    (101, 6, 'Charles', 'Coleman', 'Web Development and Software Frameworks'),
+    (102, 7, 'Sean', 'Guyon', 'Cloud Computing and IoT'),
+    (103, 2, 'Will', 'Jacobs', 'Data Analytics and Machine Learning'),
+    (104, 3, 'David', 'Kalinowski', 'Sustainable Biochemistry Processes');
 
 -- Students
 INSERT INTO 
@@ -185,18 +179,18 @@ VALUES
     ('Senior', 8, 'Jane', 'Smith');
 
 -- Community Users
-INSERT INTO    
-    community_users (userID, name) 
-VALUES 
-    (107, 'Emma Kang'),
-    (108, 'Peter Parker'),
-    (109, 'Steve Rogers'),
-    (110, 'Tony Stark'),
-    (111, 'Jim Goods'),
-    (112, 'Denis Fire'),
-    (113, 'Elon Musk'),
-    (114, 'LeBron James'),
-    (115, 'Stephen Curry');
+-- INSERT INTO    
+--     community_users (userID, name) 
+-- VALUES 
+--     (107, 'Emma Kang'),
+--     (108, 'Peter Parker'),
+--     (109, 'Steve Rogers'),
+--     (110, 'Tony Stark'),
+--     (111, 'Jim Goods'),
+--     (112, 'Denis Fire'),
+--     (113, 'Elon Musk'),
+--     (114, 'LeBron James'),
+--     (115, 'Stephen Curry');
 
 -- Projects
 INSERT INTO 
