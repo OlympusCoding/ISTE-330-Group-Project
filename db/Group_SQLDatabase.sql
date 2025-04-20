@@ -175,13 +175,13 @@ VALUES
 INSERT INTO 
     students (categoryYear, departmentID, firstName, lastName) 
 VALUES 
-    ('Senior', 6, 'Flavio', 'Medina'),
-    ('Senior', 6, 'Charles', 'Coleman'),
-    ('Freshman', 7, 'Sean', 'Guyon'),
-    ('Junior', 2, 'Will', 'Jacobs'),
-    ('Junior', 3, 'David', 'Kalinowski'),
-    ('Sophomore', 9, 'John', 'Doe'),
-    ('Senior', 8, 'Jane', 'Smith');
+    ('senior', 6, 'Flavio', 'Medina'),
+    ('senior', 6, 'Charles', 'Coleman'),
+    ('freshman', 7, 'Sean', 'Guyon'),
+    ('junior', 2, 'Will', 'Jacobs'),
+    ('junior', 3, 'David', 'Kalinowski'),
+    ('sophomore', 9, 'John', 'Doe'),
+    ('senior', 8, 'Jane', 'Smith');
 
 -- Community Users
 -- INSERT INTO    
