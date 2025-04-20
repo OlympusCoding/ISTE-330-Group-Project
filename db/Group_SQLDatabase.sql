@@ -54,6 +54,8 @@ CREATE TABLE faculty (
     firstName VARCHAR(50) DEFAULT NULL,
     lastName VARCHAR(50) DEFAULT NULL,
     abstract VARCHAR(200) DEFAULT NULL,
+    buildingNum VARCHAR(50) DEFAULT NULL, 
+    officeNum VARCHAR(50) DEFAULT NULL,
     PRIMARY KEY (userID, departmentID),
     CONSTRAINT faculty_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT faculty_departmentID_FK FOREIGN KEY (departmentID) REFERENCES departments(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -160,15 +162,15 @@ VALUES
 
 -- Faculty
 INSERT INTO 
-    faculty(userID, departmentID, firstName, lastName, abstract) 
+    faculty(userID, departmentID, firstName, lastName, abstract, buildingNum, officeNum) 
 VALUES
-    (100, 6, 'Flavio', 'Medina', 'AI and Cybersecurity expert'),
-    (101, 6, 'Charles', 'Coleman', 'Web Development and Software Frameworks'),
-    (102, 7, 'Sean', 'Guyon', 'Cloud Computing and IoT'),
-    (103, 2, 'Will', 'Jacobs', 'Data Analytics and Machine Learning'),
-    (104, 3, 'David', 'Kalinowski', 'Sustainable Biochemistry Processes'),
-    (105, 9, 'John', 'Doe', 'Accessibility tech for Deaf students'),
-    (106, 8, 'Jane', 'Smith', 'AI and Robotics');
+    (100, 6, 'Flavio', 'Medina', 'AI and Cybersecurity expert', 'Building 70', 'Room 470'),
+    (101, 6, 'Charles', 'Coleman', 'Web Development and Software Frameworks', 'Building 70', 'Room 240'),
+    (102, 7, 'Sean', 'Guyon', 'Cloud Computing and IoT', 'Building 81', 'Room 370'),
+    (103, 2, 'Will', 'Jacobs', 'Data Analytics and Machine Learning', 'Building 82', 'Room 210'),
+    (104, 3, 'David', 'Kalinowski', 'Sustainable Biochemistry Processes', 'Building 76', 'Room 50'),
+    (105, 9, 'John', 'Doe', 'Accessibility tech for Deaf students', 'Building 60', 'Room 340'),
+    (106, 8, 'Jane', 'Smith', 'AI and Robotics', 'Building 9', 'Room 115');
 
 -- Students
 INSERT INTO 
