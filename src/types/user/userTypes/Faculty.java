@@ -6,10 +6,12 @@ public class Faculty extends UserTypeInfo {
     private int departmentID;
     private String firstName;
     private String lastName;
+    private int buildingNum;
+    private int officeNum;
     private String facultyAbstract;
 
 
-    public Faculty(int departmentID, String firstName, String lastName, String facultyAbstract)
+    public Faculty(int departmentID, String firstName, String lastName, int buildingNum, int officeNum, String facultyAbstract)
     {
         super();
         this.departmentID = departmentID;
@@ -31,6 +33,16 @@ public class Faculty extends UserTypeInfo {
     }
     public String getFacultyAbstract() {
         return facultyAbstract;
+    }
+
+    public int getBuildingNum()
+    {
+        return buildingNum;
+    }
+
+    public int getOfficeNum()
+    {
+        return officeNum;
     }
     
 }

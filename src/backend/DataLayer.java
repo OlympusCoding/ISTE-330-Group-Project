@@ -2,6 +2,7 @@
  * File: Data Layer
  * Group: 2
  * Project: Group Project
+ * Authors: Charles Coleman, Flavio Medina, Will Jacobs, Sean Guyon, David Kalinowski
  * Class: ISTE-330
  */
 
@@ -12,6 +13,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import types.user.UserParams;
 import types.user.userTypes.Community;
@@ -20,6 +23,7 @@ import types.user.userTypes.Student;
 
 public class DataLayer {
     private Connection conn;
+
     public boolean connect(String username, String password, String url) {
         try {
             conn = DriverManager.getConnection(username, password, url);
@@ -27,16 +31,17 @@ public class DataLayer {
             return true;
         } catch (SQLException e) {
             try {
-            url = "jdbc:mysql://localhost:3307/"+url; 
-            conn = DriverManager.getConnection(username, password, url);
-            System.out.println("DB Connected - Group 2");
-            return true;
+                url = "jdbc:mysql://localhost:3306/" + url;
+                conn = DriverManager.getConnection(username, password, url);
+                System.out.println("DB Connected - Group 2");
+                return true;
             } catch (SQLException e2) {
-               e2.printStackTrace();
-               return false;
+                e2.printStackTrace();
+                return false;
             }
         }
     }
+
     public boolean close() {
         try {
             if (conn != null && !conn.isClosed()) {
@@ -49,7 +54,8 @@ public class DataLayer {
         }
         return false;
     }
-    public Boolean checkUsername(String username){
+
+    public Boolean checkUsername(String username) {
         String sql = "SELECT userID FROM users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -64,7 +70,8 @@ public class DataLayer {
             return false;
         }
     }
-    public Boolean checkPassword(String username, String password){
+
+    public Boolean checkPassword(String username, String password) {
         String sql = "SELECT userID FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -80,9 +87,9 @@ public class DataLayer {
             return false;
         }
     }
-    
+
     // Add functions
-    public Boolean addUser(UserParams params){
+    public Boolean addUser(UserParams params) {
         String username = params.getUsername();
         String password = params.getPassword();
         String email = params.getEmail();
@@ -97,11 +104,11 @@ public class DataLayer {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                if(type.equals("student")){
+                if (type.equals("student")) {
                     addStudent(params);
-                }else if(type.equals("faculty")){
+                } else if (type.equals("faculty")) {
                     addFaculty(params);
-                }else{
+                } else {
                     addCommunity(params);
                 }
                 return true;
@@ -113,10 +120,11 @@ public class DataLayer {
             return false;
         }
     }
+
     public boolean addStudent(UserParams params) {
-    
+
         Student studentInfo = (Student) params.getUserTypeInfo();
-    
+
         String sql = "INSERT INTO students (userID, categoryYear, departmentID, firstName, lastName) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, params.getUserID());
@@ -124,13 +132,14 @@ public class DataLayer {
             stmt.setInt(3, studentInfo.getDepartmentID());
             stmt.setString(4, studentInfo.getFirstName());
             stmt.setString(5, studentInfo.getLastName());
-    
+
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
     public Boolean addFaculty(UserParams params) {
         String username = params.getUsername();
         String password = params.getPassword();
@@ -158,6 +167,7 @@ public class DataLayer {
             return false;
         }
     }
+
     public Boolean addCommunity(UserParams params) {
         String username = params.getUsername();
         String password = params.getPassword();
@@ -179,6 +189,7 @@ public class DataLayer {
             return false;
         }
     }
+
     public boolean addProject(int userID, String projectName, String description) {
         String sql = "INSERT INTO projects (userID, name, description) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -191,14 +202,46 @@ public class DataLayer {
             return false;
         }
     }
+
     public boolean addInterest(int userID, String interestDescription) {
 
         // I don't really know what to do for interests
-       return false;
+        String interestInsert = "INSERT INTO interests (description) VALUES (?)";
+        String interestIDQuery = "SELECT interestID FROM interests WHERE description = ?";
+        String userInterestInsert = "INSERT INTO user_interests (userID, interestID) VALUES (?, ?)";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(interestInsert);
+            stmt.setString(1, interestDescription);
+            if (stmt.executeUpdate() > 0) {
+                // Records Inserted, Continue
+                stmt = conn.prepareStatement(interestIDQuery);
+                stmt.setString(userID, userInterestInsert);
+                ResultSet rs = stmt.executeQuery();
+                int interestID = -1;
+                while (rs.next()) {
+                    interestID = rs.getInt(1);
+                }
+                if (interestID == -1) {
+                    return false;
+                }
+                stmt = conn.prepareStatement(userInterestInsert);
+                stmt.setInt(1, userID);
+                stmt.setInt(2, interestID);
+                return stmt.executeUpdate() > 0;
+
+            } else {
+                // No records inserted, do not continue
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
+
     public boolean addAbstract(int userID, String abstractText) {
         String sql = "UPDATE faculty SET abstract = ? WHERE userID = ?";
-    
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, abstractText);
             stmt.setInt(2, userID);
@@ -210,7 +253,7 @@ public class DataLayer {
     }
 
     // Get Functions for All Users
-    public String getUserID(String username, String password){
+    public String getUserID(String username, String password) {
         String sql = "SELECT userID FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -226,7 +269,8 @@ public class DataLayer {
             return "";
         }
     }
-    public String getUserUsername(int userID){
+
+    public String getUserUsername(int userID) {
         String sql = "SELECT username FROM users WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -242,7 +286,8 @@ public class DataLayer {
             return "";
         }
     }
-    public String getUserEmail(int userID){
+
+    public String getUserEmail(int userID) {
         String sql = "SELECT email FROM users WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -258,7 +303,8 @@ public class DataLayer {
             return "";
         }
     }
-    public String getUserType(int userID){
+
+    public String getUserType(int userID) {
         String sql = "SELECT userType FROM users WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -274,9 +320,10 @@ public class DataLayer {
             return "";
         }
     }
-    public String getUserFirstName(int userID){
+
+    public String getUserFirstName(int userID) {
         String userType = getUserType(userID);
-        String sql = "SELECT firstName FROM "+userType+" WHERE userID = ? ";
+        String sql = "SELECT firstName FROM " + userType + " WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
@@ -291,9 +338,10 @@ public class DataLayer {
             return "";
         }
     }
-    public String getUserLastName(int userID){
+
+    public String getUserLastName(int userID) {
         String userType = getUserType(userID);
-        String sql = "SELECT lastName FROM "+userType+" WHERE userID = ? ";
+        String sql = "SELECT lastName FROM " + userType + " WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
@@ -308,13 +356,14 @@ public class DataLayer {
             return "";
         }
     }
-    public String getUserFullName(int userID){
+
+    public String getUserFullName(int userID) {
         String userType = getUserType(userID);
-        String sql = "SELECT (firstname, lastName) AS name FROM "+userType+" WHERE userID = ?";
-        if(userType.equals("Community")){
-            sql = "SELECT name FROM "+userType+" WHERE userID = ? ";
+        String sql = "SELECT (firstname, lastName) AS name FROM " + userType + " WHERE userID = ?";
+        if (userType.equals("Community")) {
+            sql = "SELECT name FROM " + userType + " WHERE userID = ? ";
         }
-        
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
@@ -329,9 +378,10 @@ public class DataLayer {
             return "";
         }
     }
-    public String getUserDepartmentID(int userID){
+
+    public String getUserDepartmentID(int userID) {
         String userType = getUserType(userID);
-        String sql = "SELECT departmentID FROM "+userType+" WHERE userID = ? ";
+        String sql = "SELECT departmentID FROM " + userType + " WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
@@ -348,7 +398,7 @@ public class DataLayer {
     }
 
     // Get Functions for Faculty
-    public String getFacultyAbstract(int userID){
+    public String getFacultyAbstract(int userID) {
         String sql = "SELECT abstract FROM faculty WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -366,7 +416,7 @@ public class DataLayer {
     }
 
     // Get Functions for Students
-    public String getStudentYear(int userID){
+    public String getStudentYear(int userID) {
         String sql = "SELECT categoryYear FROM faculty WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -384,7 +434,7 @@ public class DataLayer {
     }
 
     // Get Functions for Interests
-    public String getInterest(int interestID){
+    public String getInterest(int interestID) {
         String sql = "SELECT description FROM interests WHERE interestID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, interestID);
@@ -395,14 +445,14 @@ public class DataLayer {
             } else {
                 return "No description found for userID: " + interestID;
             }
-         } catch (SQLException e) {
-             e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             return "";
-         }
+        }
     }
 
     // Get Functions for Projects
-    public String getProjectName(int projectID){
+    public String getProjectName(int projectID) {
         String sql = "SELECT name FROM projects WHERE projectID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, projectID);
@@ -413,12 +463,13 @@ public class DataLayer {
             } else {
                 return "No name found for userID: " + projectID;
             }
-         } catch (SQLException e) {
-             e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             return "";
-         }
+        }
     }
-    public String getProjectDescription(int projectID){
+
+    public String getProjectDescription(int projectID) {
         String sql = "SELECT description FROM projects WHERE projectID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, projectID);
@@ -429,14 +480,14 @@ public class DataLayer {
             } else {
                 return "No description found for userID: " + projectID;
             }
-         } catch (SQLException e) {
-             e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             return "";
-         }
+        }
     }
 
     // Get Functions for Departments
-    public String getDepartmentName(int departmentID){
+    public String getDepartmentName(int departmentID) {
         String sql = "SELECT name FROM departments WHERE departmentID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, departmentID);
@@ -456,9 +507,9 @@ public class DataLayer {
     // Edit Users
     public boolean updateFirstName(int userID, String newName) {
         String userType = getUserType(userID);
-        
+
         String tableName;
-    
+
         switch (userType.toLowerCase()) {
             case "student":
                 tableName = "students";
@@ -469,7 +520,7 @@ public class DataLayer {
             default:
                 return false;
         }
-    
+
         String sql = "UPDATE " + tableName + " SET firstName = ? WHERE userID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newName);
@@ -480,10 +531,11 @@ public class DataLayer {
             return false;
         }
     }
+
     public boolean updateLastName(int userID, String newName) {
         String userType = getUserType(userID);
         String tableName;
-    
+
         switch (userType.toLowerCase()) {
             case "student":
                 tableName = "students";
@@ -494,9 +546,9 @@ public class DataLayer {
             default:
                 return false;
         }
-    
+
         String sql = "UPDATE " + tableName + " SET lastName = ? WHERE userID = ?";
-    
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, newName);
             stmt.setInt(2, userID);
@@ -506,6 +558,7 @@ public class DataLayer {
             return false;
         }
     }
+
     public boolean updatePassword(int userID, String password) {
         String sql = "UPDATE users SET password = ? WHERE userID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -517,6 +570,7 @@ public class DataLayer {
             return false;
         }
     }
+
     public boolean updateAbstract(int userID, String newAbstract) {
         String sql = "UPDATE faculty SET abstract = ? WHERE userID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -528,22 +582,12 @@ public class DataLayer {
             return false;
         }
     }
+
     public boolean updateProjectName(int projectID, String projectName) {
-        String sql = "UPDATE users SET projectName = ? WHERE userID = ?";
+        String sql = "UPDATE users SET projectName = ? WHERE projectID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, projectName);
-            stmt.setInt(2, userID);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    public boolean updateProjectDescription(int projectID, String projectDescription) {
-        String sql = "UPDATE users SET projectDescription = ? WHERE userID = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, projectDescription);
-            stmt.setInt(2, userID);
+            stmt.setInt(2, projectID);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -551,10 +595,35 @@ public class DataLayer {
         }
     }
 
+    public boolean updateProjectDescription(int projectID, String projectDescription) {
+        String sql = "UPDATE users SET projectDescription = ? WHERE projectID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, projectDescription);
+            stmt.setInt(2, projectID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateInterest(int interestID, String interestDescription) {
+        String sql = "UPDATE interests SET description = ? WHERE interestID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, interestDescription);
+            stmt.setInt(2, interestID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     // Remove from users
     public boolean removeAbstract(int userID) {
         String sql = "UPDATE faculty SET abstract = NULL WHERE userID = ?";
-    
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
             return stmt.executeUpdate() > 0;
@@ -563,9 +632,10 @@ public class DataLayer {
             return false;
         }
     }
+
     public boolean removeProject(int projectID) {
         String sql = "DELETE FROM projects WHERE projectID = ?";
-    
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, projectID);
             return stmt.executeUpdate() > 0;
@@ -574,5 +644,42 @@ public class DataLayer {
             return false;
         }
     }
-    
+
+    public boolean removeInterest(int userID, int interestID)
+    {
+        String sql = "DELETE FROM user_interests WHERE userID = ? AND projectID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userID);
+            stmt.setInt(2, interestID);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Faculty> searchForFacultyByInterest(List<String> interests)
+    {
+        List<Faculty> toReturn = new ArrayList<Faculty>();
+        String sql = "SELECT u.firstName, u.lastName, f.buildingNum, f.officeNum i.description FROM users JOIN faculty AS f USING (userID) JOIN user_interests AS ui USING (userID) JOIN interests AS i USING (interestID) WHERE i.description LIKE '?'";
+        
+        for (String interest : interests) {
+            try  {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setString(1, interest);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next())
+                {
+                    toReturn.add(new Faculty(0, rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4), ""));
+                }
+                
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return toReturn;
+       
+    }
+
 }
