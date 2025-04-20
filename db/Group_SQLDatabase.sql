@@ -5,13 +5,11 @@
 -- Date: 04/19/25
 -- Version: 1.0
 
-
 DROP DATABASE IF EXISTS 330_project_research;
 
 CREATE DATABASE 330_project_research;
 
 USE 330_project_research;
-
 
 -- Users
 CREATE TABLE users (
@@ -25,18 +23,12 @@ CREATE TABLE users (
 
 ALTER TABLE users AUTO_INCREMENT = 100;
 
-
-
-
 -- Interests
 CREATE TABLE interests (
     interestID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     description VARCHAR(50) NOT NULL,
     PRIMARY KEY (interestID)
 );
-
-
-
 
 -- User Interests
 CREATE TABLE user_interests (
@@ -47,9 +39,6 @@ CREATE TABLE user_interests (
     CONSTRAINT user_interests_FK FOREIGN KEY (interestID) REFERENCES interests(interestID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
-
-
 -- Department
 CREATE TABLE departments (
     departmentID INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -57,9 +46,6 @@ CREATE TABLE departments (
     abbreviation CHAR(10) DEFAULT NULL,
     PRIMARY KEY (departmentID)
 );
-
-
-
 
 -- Faculty
 CREATE TABLE faculty (
@@ -72,9 +58,6 @@ CREATE TABLE faculty (
     CONSTRAINT faculty_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT faculty_departmentID_FK FOREIGN KEY (departmentID) REFERENCES departments(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-
-
 
 -- Students
 CREATE TABLE students (
@@ -89,8 +72,7 @@ CREATE TABLE students (
     CONSTRAINT chk_categoryYear CHECK (categoryYear IN ('freshman', 'sophomore', 'junior', 'senior'))
 );
 
-INSERT INTO students (userID, categoryYear, departmentID, firstName, lastName) VALUES (0, '', 0, '', ''),;
-
+INSERT INTO students (userID, categoryYear, departmentID, firstName, lastName) VALUES (0, '', 0, '', '');
 
 -- Community Users
 CREATE TABLE community_users (
@@ -99,9 +81,6 @@ CREATE TABLE community_users (
     PRIMARY KEY (userID),
     CONSTRAINT community_user_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
-
-
 
 -- Projects
 CREATE TABLE projects (
@@ -113,10 +92,9 @@ CREATE TABLE projects (
     CONSTRAINT project_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
-/* ====================
-        Insert:
-=======================*/
+-- ====================
+-- Insert:
+-- ====================
 
 -- Users
 INSERT INTO 
@@ -227,18 +205,5 @@ VALUES
     (102, 'Smart Campus', 'Link campus tech using IoT'),
     (103, 'Stock ML', 'ML Model for stock prediction'),
     (104, 'Green Chem', 'Make eco-friendly lab materials'),
-    (105, 'ASL App', 'App to teach ASL basics'),
-    (106, 'Robot Arm', 'AI for object sorting task');
-
-
--- Projects
-INSERT INTO 
-    projects (userID, name, description) 
-VALUES 
-    (100, 'Secure AI', 'Use AI to detect cyber treats'),
-    (101, 'Web Tools', 'Compare React and Vue performance'),
-    (102, 'Smart Campus', 'Link campus tech using IoT'),
-    (103, 'Stock ML', 'ML Model for stock prediction'),
-    (104, 'Green Chem', 'Make eco-frendly lab materials');
     (105, 'ASL App', 'App to teach ASL basics'),
     (106, 'Robot Arm', 'AI for object sorting task');
