@@ -22,23 +22,30 @@ import types.user.userTypes.Faculty;
 import types.user.userTypes.Student;
 
 public class DataLayer {
+
+    private final String DEFAULT_DRIVER = "com.mysql.cj.jdbc.Driver";
     private Connection conn;
 
     public boolean connect(String username, String password, String url) {
         try {
-            conn = DriverManager.getConnection(username, password, url);
+            Class.forName(DEFAULT_DRIVER);
+            conn = DriverManager.getConnection(url, username, password);
             System.out.println("DB Connected - Group 2");
             return true;
         } catch (SQLException e) {
             try {
                 url = "jdbc:mysql://localhost:3306/" + url;
-                conn = DriverManager.getConnection(username, password, url);
+                conn = DriverManager.getConnection(url, username, password);
                 System.out.println("DB Connected - Group 2");
                 return true;
             } catch (SQLException e2) {
                 e2.printStackTrace();
                 return false;
             }
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -661,7 +668,7 @@ public class DataLayer {
     public List<Faculty> searchForFacultyByInterest(List<String> interests)
     {
         List<Faculty> toReturn = new ArrayList<Faculty>();
-        String sql = "SELECT u.firstName, u.lastName, f.buildingNum, f.officeNum i.description FROM users JOIN faculty AS f USING (userID) JOIN user_interests AS ui USING (userID) JOIN interests AS i USING (interestID) WHERE i.description LIKE '?'";
+        String sql = "SELECT f.firstName, f.lastName, f.buildingNum, f.officeNum, i.description FROM users as u JOIN faculty AS f on u.userID = f.userID JOIN user_interests AS ui ON u.userID = ui.userID JOIN interests AS i ON ui.interestID = i.interestID WHERE i.description LIKE ?";
         
         for (String interest : interests) {
             try  {
@@ -670,7 +677,7 @@ public class DataLayer {
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next())
                 {
-                    toReturn.add(new Faculty(0, rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4), ""));
+                    toReturn.add(new Faculty(0, rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), ""));
                 }
                 
             } catch (SQLException e) {

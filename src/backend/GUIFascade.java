@@ -171,16 +171,6 @@ public class GUIFascade {
 
         dataLayer.connect("root", "student", "330_project_research");
 
-        if (fascade.Login("willjacobs", "student4"))
-        {
-            System.out.println("Login Successful for User: willjacobs");
-        }
-        else
-        {
-            System.out.println("Login unsuccessful, please re-run the program");
-            return;
-        }
-
         System.out.println("Updating Faculty Abstract for userID #100");
         if (fascade.UpdateFacultyAbstract(100, "The leading AI and Machine Learning Book for those in higher educational institutions"))
         {
@@ -193,10 +183,9 @@ public class GUIFascade {
 
         System.out.println("Search Functions:");
         System.out.println("-----------------------------");
-        System.out.println("Seraching for Faculty Member with interests 'AI' and 'Machine Learning'");
+        System.out.println("Seraching for Faculty Member with interests 'Finance'");
         List<String> testInterests = new ArrayList<String>();
-        testInterests.add("AI");
-        testInterests.add("Machine Learning");
+        testInterests.add("Artificial Intelligence");
         List<Faculty> facultyReturned = fascade.SearchForFacultyByInterest(testInterests);
         System.out.println("The faculty members that were returned: ");
         for (Faculty faculty : facultyReturned) {

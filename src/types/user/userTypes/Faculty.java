@@ -6,18 +6,21 @@ public class Faculty extends UserTypeInfo {
     private int departmentID;
     private String firstName;
     private String lastName;
-    private int buildingNum;
-    private int officeNum;
+    private String buildingNum;
+    private String officeNum;
     private String facultyAbstract;
 
 
-    public Faculty(int departmentID, String firstName, String lastName, int buildingNum, int officeNum, String facultyAbstract)
+    public Faculty(int departmentID, String firstName, String lastName, String buildingNum, String officeNum, String facultyAbstract)
     {
         super();
         this.departmentID = departmentID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.facultyAbstract = facultyAbstract;
+        this.buildingNum = buildingNum;
+        this.officeNum = officeNum;
+        
     }
     public String getUserType() {
         return userType;
@@ -35,12 +38,12 @@ public class Faculty extends UserTypeInfo {
         return facultyAbstract;
     }
 
-    public int getBuildingNum()
+    public String getBuildingNum()
     {
         return buildingNum;
     }
 
-    public int getOfficeNum()
+    public String getOfficeNum()
     {
         return officeNum;
     }
