@@ -166,6 +166,7 @@ VALUES
     (103, 2, 'Will', 'Jacobs', 'Data Analytics and Machine Learning'),
     (104, 3, 'David', 'Kalinowski', 'Sustainable Biochemistry Processes');
 
+
 -- Students
 INSERT INTO 
     students (categoryYear, departmentID, firstName, lastName) 
