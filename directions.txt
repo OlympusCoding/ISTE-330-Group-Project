@@ -1,0 +1,5 @@
+To run the application:
+
+    - SOURCE the sql script titled: GROUP_SQLDatabase.sql
+    - Run the GUIFascade File's Main Method and it will run through the main functionalities of the application
+    
