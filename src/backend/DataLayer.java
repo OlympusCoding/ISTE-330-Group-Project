@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import types.StatsType;
+import types.enums.UserType;
 import types.user.UserParams;
 import types.user.userTypes.Community;
 import types.user.userTypes.Faculty;
@@ -150,7 +152,7 @@ public class DataLayer {
     public Boolean addFaculty(UserParams params) {
         String username = params.getUsername();
         String password = params.getPassword();
-        int userID = Integer.parseInt(getUserID(username, password));
+        int userID = getUserID(username);
 
         Faculty faculty = (Faculty) params.getUserTypeInfo();
         int deptID = faculty.getDepartmentID();
@@ -178,7 +180,7 @@ public class DataLayer {
     public Boolean addCommunity(UserParams params) {
         String username = params.getUsername();
         String password = params.getPassword();
-        int userID = Integer.parseInt(getUserID(username, password));
+        int userID = getUserID(username);
 
         Community community = (Community) params.getUserTypeInfo();
         String name = community.getName();
@@ -260,20 +262,19 @@ public class DataLayer {
     }
 
     // Get Functions for All Users
-    public String getUserID(String username, String password) {
-        String sql = "SELECT userID FROM users WHERE username = ? AND password = ?";
+    public int getUserID(String username) {
+        String sql = "SELECT userID FROM users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
-            stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getString("userID");
+                return rs.getInt("userID");
             } else {
-                return "";
+                return -1;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return "";
+            return -1;
         }
     }
 
@@ -311,25 +312,27 @@ public class DataLayer {
         }
     }
 
-    public String getUserType(int userID) {
+    public UserType getUserType(int userID) {
         String sql = "SELECT userType FROM users WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getString("userType");
+                String userTypeString = rs.getString("userType").toLowerCase();
+                UserType userType = UserType.valueOf(userTypeString);
+                return userType;
             } else {
-                return "No userType found for userID: " + userID;
+                return null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return "";
+            return null;
         }
     }
 
     public String getUserFirstName(int userID) {
-        String userType = getUserType(userID);
+        String userType = getUserType(userID).name();
         String sql = "SELECT firstName FROM " + userType + " WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -347,7 +350,7 @@ public class DataLayer {
     }
 
     public String getUserLastName(int userID) {
-        String userType = getUserType(userID);
+        String userType = getUserType(userID).name();
         String sql = "SELECT lastName FROM " + userType + " WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -365,7 +368,7 @@ public class DataLayer {
     }
 
     public String getUserFullName(int userID) {
-        String userType = getUserType(userID);
+        String userType = getUserType(userID).name();
         String sql = "SELECT (firstname, lastName) AS name FROM " + userType + " WHERE userID = ?";
         if (userType.equals("Community")) {
             sql = "SELECT name FROM " + userType + " WHERE userID = ? ";
@@ -387,7 +390,7 @@ public class DataLayer {
     }
 
     public String getUserDepartmentID(int userID) {
-        String userType = getUserType(userID);
+        String userType = getUserType(userID).name();
         String sql = "SELECT departmentID FROM " + userType + " WHERE userID = ? ";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -513,7 +516,7 @@ public class DataLayer {
 
     // Edit Users
     public boolean updateFirstName(int userID, String newName) {
-        String userType = getUserType(userID);
+        String userType = getUserType(userID).name();
 
         String tableName;
 
@@ -540,7 +543,7 @@ public class DataLayer {
     }
 
     public boolean updateLastName(int userID, String newName) {
-        String userType = getUserType(userID);
+        String userType = getUserType(userID).name();
         String tableName;
 
         switch (userType.toLowerCase()) {
@@ -626,7 +629,6 @@ public class DataLayer {
         }
     }
 
-
     // Remove from users
     public boolean removeAbstract(int userID) {
         String sql = "UPDATE faculty SET abstract = NULL WHERE userID = ?";
@@ -652,8 +654,7 @@ public class DataLayer {
         }
     }
 
-    public boolean removeInterest(int userID, int interestID)
-    {
+    public boolean removeInterest(int userID, int interestID) {
         String sql = "DELETE FROM user_interests WHERE userID = ? AND projectID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
@@ -665,28 +666,52 @@ public class DataLayer {
         }
     }
 
-    public List<Faculty> searchForFacultyByInterest(List<String> interests)
-    {
+    public List<Faculty> searchForFacultyByInterest(List<String> interests) {
         List<Faculty> toReturn = new ArrayList<Faculty>();
         String sql = "SELECT f.firstName, f.lastName, f.buildingNum, f.officeNum, i.description FROM users as u JOIN faculty AS f on u.userID = f.userID JOIN user_interests AS ui ON u.userID = ui.userID JOIN interests AS i ON ui.interestID = i.interestID WHERE i.description LIKE ?";
-        
+
         for (String interest : interests) {
-            try  {
+            try {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, interest);
                 ResultSet rs = stmt.executeQuery();
-                while (rs.next())
-                {
-                    toReturn.add(new Faculty(0, rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), ""));
+                while (rs.next()) {
+                    toReturn.add(
+                            new Faculty(0, rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), ""));
                 }
-                
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
         return toReturn;
-       
+
+    }
+
+    public StatsType getStats() {
+        String sql = "SELECT (SELECT COUNT(*) FROM faculty) AS faculty_count, (SELECT COUNT(*) FROM students) AS student_count, (SELECT COUNT(*) FROM community_users) AS community_users_count;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            int facultyCount = 0;
+            int studentCount = 0;
+            int communityCount = 0;
+
+            if (rs.next()) {
+                facultyCount = rs.getInt("faculty_count");
+            }
+            if (rs.next()) {
+                studentCount = rs.getInt("student_count");
+            }
+            if (rs.next()) {
+                communityCount = rs.getInt("community_users_count");
+            }
+
+            return new StatsType(facultyCount, studentCount, communityCount);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

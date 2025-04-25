@@ -17,4 +17,8 @@ public class Encryption {
             throw new RuntimeException("Unsupported encoding", e);
         }
     }
+
+    public static void main(String[] args) {
+        System.out.println(Encryption.encrypt("password"));
+    }
 }
