@@ -10,7 +10,6 @@ package frontend;
 import backend.DataLayer;
 import backend.GUIFascade;
 import frontend.views.Login;
-import utility.Encryption;
 
 import java.io.File;
 import java.awt.*;

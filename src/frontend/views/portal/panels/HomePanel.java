@@ -85,6 +85,8 @@ public class HomePanel extends JPanel {
         JTextField searchField = searchbar.getSearchField();
         JButton searchButton = searchbar.getSearchButton();
 
+        parent.getRootPane().setDefaultButton(searchButton);
+
         // Results panel
         this.resultsContainer = new JPanel();
         resultsContainer.setLayout(new BoxLayout(resultsContainer, BoxLayout.Y_AXIS));
@@ -141,7 +143,7 @@ public class HomePanel extends JPanel {
                 }
 
                 // Clear the search field
-                searchField.setText("Search");
+                searchField.setText("");
 
                 // Check UserType and perform search accordingly
                 if (userType.equals(UserType.faculty)) {
@@ -149,11 +151,7 @@ public class HomePanel extends JPanel {
                 } else if (userType.equals(UserType.student)) {
                     handleStudentSearch(searchText);
                 } else {
-                    // Search for students or faculty by interest
-                    JOptionPane.showMessageDialog(parent, "NOT IMPLEMENTED YET",
-                            "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
+                    handleCommunitySearch(searchText);
                 }
 
             }
@@ -177,9 +175,9 @@ public class HomePanel extends JPanel {
 
         int index = 1;
         for (Faculty fac : faculty) {
-            JButton facultyButton = new JButton(
+            JButton facultyButton = new JButton("Faculty: " +
                     index + ": " + fac.getFirstName() + " " + fac.getLastName() + " - "
-                            + fac.getBuildingNum() + " - " + fac.getOfficeNum() + " - " + fac.getEmail());
+                    + fac.getBuildingNum() + " - " + fac.getOfficeNum() + " - " + fac.getEmail());
             facultyButton.setFont(facultyButton.getFont().deriveFont(Font.PLAIN, 14f));
             facultyButton.setForeground(Color.WHITE);
             facultyButton.setBackground(Color.decode("#202225"));
@@ -208,7 +206,7 @@ public class HomePanel extends JPanel {
 
         int index = 1;
         for (Student stu : students) {
-            JButton studentButton = new JButton(
+            JButton studentButton = new JButton("Student: " +
                     index + ": " + stu.getFirstName() + " " + stu.getLastName() + " - " + stu.getEmail());
             studentButton.setFont(studentButton.getFont().deriveFont(Font.PLAIN, 14f));
             studentButton.setForeground(Color.WHITE);
@@ -217,6 +215,53 @@ public class HomePanel extends JPanel {
             studentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
             studentButton.setBorder(new EmptyBorder(4, 8, 4, 8));
             this.resultsPanel.add(studentButton);
+            index++;
+        }
+
+        resultsContainer.add(scrollPane);
+        resultsContainer.revalidate();
+        resultsContainer.repaint();
+    }
+
+    private void handleCommunitySearch(String searchText) {
+        List<Student> students = fascade.SearchForStudentByAbstract(searchText);
+        String[] interests = searchText.split(",");
+        List<String> interestList = List.of(interests);
+        List<Faculty> faculty = fascade.SearchForFacultyByInterest(interestList);
+
+        if (students.isEmpty() && faculty.isEmpty()) {
+            JOptionPane.showMessageDialog(parent, "No students and or faculty found with the given search.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        createUIComponents(searchText);
+
+        int index = 1;
+        for (Student stu : students) {
+            JButton studentButton = new JButton("Student: " +
+                    index + ": " + stu.getFirstName() + " " + stu.getLastName() + " - " + stu.getEmail());
+            studentButton.setFont(studentButton.getFont().deriveFont(Font.PLAIN, 14f));
+            studentButton.setForeground(Color.WHITE);
+            studentButton.setBackground(Color.decode("#202225"));
+            studentButton.putClientProperty(FlatClientProperties.STYLE, "arc:16;");
+            studentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            studentButton.setBorder(new EmptyBorder(4, 8, 4, 8));
+            this.resultsPanel.add(studentButton);
+            index++;
+        }
+
+        for (Faculty fac : faculty) {
+            JButton facultyButton = new JButton("Faculty: " +
+                    index + ": " + fac.getFirstName() + " " + fac.getLastName() + " - "
+                    + fac.getBuildingNum() + " - " + fac.getOfficeNum() + " - " + fac.getEmail());
+            facultyButton.setFont(facultyButton.getFont().deriveFont(Font.PLAIN, 14f));
+            facultyButton.setForeground(Color.WHITE);
+            facultyButton.setBackground(Color.decode("#202225"));
+            facultyButton.putClientProperty(FlatClientProperties.STYLE, "arc:16;");
+            facultyButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            facultyButton.setBorder(new EmptyBorder(4, 8, 4, 8));
+            this.resultsPanel.add(facultyButton);
             index++;
         }
 

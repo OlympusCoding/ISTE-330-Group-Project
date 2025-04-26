@@ -1,6 +1,7 @@
 package frontend.views;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import backend.GUIFascade;
@@ -21,20 +22,20 @@ public class Login extends JFrame implements ActionListener {
         super("Login");
         this.fascade = fascade;
         setBackground(Color.decode("#202225"));
-        setSize(250, 250);
+        setSize(300, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        panel.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
         panel.setBackground(Color.decode("#202225"));
 
         /* Username Field */
         JPanel usernamePanel = new JPanel(new BorderLayout());
-        usernamePanel.setMinimumSize(new Dimension(200, 32));
-        usernamePanel.setMaximumSize(new Dimension(200, 32));
+        usernamePanel.setMinimumSize(new Dimension(250, 32));
+        usernamePanel.setMaximumSize(new Dimension(250, 32));
         usernamePanel.setBackground(Color.decode("#202225"));
         TitledBorder usernameBorder = BorderFactory.createTitledBorder("Username");
         usernameBorder.setTitleColor(Color.WHITE);
@@ -46,8 +47,8 @@ public class Login extends JFrame implements ActionListener {
 
         /* Password Field */
         JPanel passwordPanel = new JPanel(new BorderLayout());
-        passwordPanel.setMinimumSize(new Dimension(200, 32));
-        passwordPanel.setMaximumSize(new Dimension(200, 32));
+        passwordPanel.setMinimumSize(new Dimension(250, 32));
+        passwordPanel.setMaximumSize(new Dimension(250, 32));
         passwordPanel.setBackground(Color.decode("#202225"));
         TitledBorder passwordBorder = BorderFactory.createTitledBorder("Password");
         passwordBorder.setTitleColor(Color.WHITE);
@@ -65,12 +66,13 @@ public class Login extends JFrame implements ActionListener {
         loginButton.setBackground(Color.decode("#6682FF"));
         loginButton.setForeground(Color.WHITE);
         loginButton.addActionListener(this);
+        loginPanel.setBorder(new EmptyBorder(8, 0, 0, 0));
         loginPanel.add(loginButton, BorderLayout.CENTER);
 
+        getRootPane().setDefaultButton(loginButton);
+
         panel.add(usernamePanel);
-        panel.add(Box.createRigidArea(new Dimension(0, 4)));
         panel.add(passwordPanel);
-        panel.add(Box.createRigidArea(new Dimension(0, 4)));
         panel.add(loginPanel);
 
         add(panel);
