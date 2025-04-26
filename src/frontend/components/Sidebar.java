@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class Sidebar extends JPanel {
     private NavButton homeButton;
-    private NavButton addButton;
+    private NavButton editButton;
     private NavButton creditsButton;
     private NavButton logoutButton;
 
@@ -48,9 +48,9 @@ public class Sidebar extends JPanel {
         add(homeButton);
         /* Add Button */
         if (userType.equals(UserType.faculty)) {
-            addButton = new NavButton("/frontend/assets/images/add.png", "Add");
-            buttons.put("add", addButton);
-            add(addButton);
+            editButton = new NavButton("/frontend/assets/images/edit.png", "Edit");
+            buttons.put("edit", editButton);
+            add(editButton);
         }
         /* Credits Button */
         creditsButton = new NavButton("/frontend/assets/images/credits.png", "Credits");
@@ -78,13 +78,13 @@ public class Sidebar extends JPanel {
             });
         }
 
-        if (addButton != null) {
-            addButton.addActionListener(new ActionListener() {
+        if (editButton != null) {
+            editButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     panels.get(activePanel).setVisible(false);
                     buttons.get(activePanel).setSelected(false);
-                    activePanel = "add";
+                    activePanel = "edit";
                     panels.get(activePanel).setVisible(true);
                     buttons.get(activePanel).setSelected(true);
                     revalidate();

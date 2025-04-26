@@ -5,7 +5,7 @@ import javax.swing.border.EmptyBorder;
 
 import backend.GUIFascade;
 import frontend.components.Sidebar;
-import frontend.views.portal.panels.AddPanel;
+import frontend.views.portal.panels.EditPanel;
 import frontend.views.portal.panels.CreditsPanel;
 import frontend.views.portal.panels.HomePanel;
 import types.enums.UserType;
@@ -45,9 +45,9 @@ public class Portal extends JFrame {
         panels.put("home", home);
         mainPanel.add(home, "home");
 
-        JPanel add = new AddPanel(this, userID);
-        panels.put("add", add);
-        mainPanel.add(add, "add");
+        JPanel edit = new EditPanel(this, userID);
+        panels.put("edit", edit);
+        mainPanel.add(edit, "edit");
 
         JPanel credits = new CreditsPanel();
         panels.put("credits", credits);

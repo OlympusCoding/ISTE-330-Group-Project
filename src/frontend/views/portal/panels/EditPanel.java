@@ -6,13 +6,13 @@ import frontend.views.portal.Portal;
 
 import java.awt.*;
 
-public class AddPanel extends JPanel {
+public class EditPanel extends JPanel {
 
-    public AddPanel(Portal parent, int userID) {
+    public EditPanel(Portal parent, int userID) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // Page Title
-        JLabel titleLabel = new JLabel("Add New Records");
+        JLabel titleLabel = new JLabel("Add & Edit Your Records");
         titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 18f));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         titleLabel.setMaximumSize(new Dimension(
