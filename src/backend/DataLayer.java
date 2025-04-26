@@ -152,7 +152,6 @@ public class DataLayer {
 
     public Boolean addFaculty(UserParams params) {
         String username = params.getUsername();
-        String password = params.getPassword();
         int userID = getUserID(username);
 
         Faculty faculty = (Faculty) params.getUserTypeInfo();
@@ -180,7 +179,6 @@ public class DataLayer {
 
     public Boolean addCommunity(UserParams params) {
         String username = params.getUsername();
-        String password = params.getPassword();
         int userID = getUserID(username);
 
         Community community = (Community) params.getUserTypeInfo();

@@ -6,7 +6,6 @@ import javax.swing.border.EmptyBorder;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import java.awt.*;
-import java.awt.event.*;
 
 public class Searchbar extends JPanel {
     private JTextField searchField;

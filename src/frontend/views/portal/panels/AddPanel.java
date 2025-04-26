@@ -2,7 +2,6 @@ package frontend.views.portal.panels;
 
 import javax.swing.*;
 
-import backend.GUIFascade;
 import frontend.views.portal.Portal;
 
 import java.awt.*;
@@ -10,7 +9,6 @@ import java.awt.*;
 public class AddPanel extends JPanel {
 
     public AddPanel(Portal parent, int userID) {
-        GUIFascade fascade = parent.getFascade();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // Page Title
