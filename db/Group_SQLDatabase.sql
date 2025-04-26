@@ -98,15 +98,12 @@ CREATE TABLE projects (
 
 -- Users
 INSERT INTO 
-    users (username, password, email) 
+    users (username, password, email, userType) 
 VALUES 
-    ('flaviomedinajr', 'student1', 'fjm8881@rit.edu'),  
-    ('charlescoleman', 'student2', 'cxctis@rit.edu'),   
-    ('seanguyon', 'student3', 'spg5070@rit.edu'),    
-    ('willjacobs', 'student4', 'whj3443@rit.edu'),    
-    ('davidkalinowski', 'student5', 'dmk7090@rit.edu'), 
-    ('johndoe', 'student6', 'johndoe@rit.edu'),    
-    ('janesmith', 'student7', 'janesmith@rit.edu');    
+    ('jHabermas', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'jrhicsa@g.rit.edu', "Faculty"),  
+    ('wJacobs', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'whj3443@g.rit.edu', "Student"),
+    ('ROCLibrary', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'reference@rplmn.org', "Community");
+
 
 -- Interests
 INSERT INTO 
@@ -114,97 +111,57 @@ INSERT INTO
 VALUES 
     ('Software Engineering'),
     ('Data Science'),
-    ('Studio Arts'),
-    ('Chemistry'),
-    ('Biochemistry'),
-    ('Accounting'),
-    ('Finance'),
-    ('Artificial Intelligence'),
-    ('Machine Learning'),
-    ('Data Science'),
-    ('Cybersecurity'),
-    ('Human-Computer Interaction'),
-    ('Computer Networks'),
-    ('Database Systems'),
-    ('Web Development'),
-    ('Computer Graphics'),
-    ('Cloud Computing');
+    ('JDBC'),
+    ('MySQL'),
+    ('Database'),
+    ('Data Security'),
+    ('SwingUI');
+
 
 -- User Interests
 INSERT INTO 
     user_interests (userID, interestID) 
 VALUES 
     (100, 1),
-    (101, 2),
-    (102, 8),
-    (103, 9),
-    (104, 4),
-    (105, 6),
-    (105, 3);
+    (100, 2),
+    (100, 3),
+    (100, 4),
+    (100, 5),
+    (100, 6),
+    (100, 7),
+    (101, 3),
+    (101, 5),
+    (101, 7);
+
 
 -- Department
 INSERT INTO 
     departments (name, abbreviation) 
 VALUES 
-    ('College of Art and Design','CAD'),
-    ('College of Engineering Technology','CET'),
-    ('College of Health Sciences and Technology','CHST'),
-    ('College of Liberal Arts','COLA'),
-    ('College of Science','COS'),
-    ('Golisano College of Computing and Information Sciences','GCCIS'),
-    ('Golisano Institute for Sustainability','GIS'),
-    ('Kate Gleason College of Engineering','KGCOE'),
-    ('National Technical Institute for the Deaf','NTID'),
-    ('Saunders College of Business','SCOB'),
-    ('School of Individualized Study','SOIS');
+    ('Golisano College of Computing and Information Sciences','GCCIS');
 
 -- Faculty
 INSERT INTO 
     faculty(userID, departmentID, firstName, lastName, abstract, buildingNum, officeNum) 
 VALUES
-    (100, 6, 'Flavio', 'Medina', 'AI and Cybersecurity expert', 'Building 70', "Room 270"),
-    (101, 6, 'Charles', 'Coleman', 'Web Development and Software Frameworks', 'Building 70', 'Room 320'),
-    (102, 7, 'Sean', 'Guyon', 'Cloud Computing and IoT', 'Building 81', 'Room 110'),
-    (103, 2, 'Will', 'Jacobs', 'Data Analytics and Machine Learning', 'Building 82', 'Room 390'),
-    (104, 3, 'David', 'Kalinowski', 'Sustainable Biochemistry Processes', 'Building 76', 'Room 260');
-    (105, 9, 'John', 'Doe', 'Accessibility tech for Deaf students', 'Building 60', 'Room 300'),
-    (106, 8, 'Jane', 'Smith', 'AI and Robotics', 'Building 9', 'Room 112');
+    (100, 1, 'Jim', 'Habermas', 'Database and Data Security Expert, with expertise in JDBC MySQL applications with SwingUI', 'Building 70', "Room 270");
+    
 
 
 -- Students
 INSERT INTO 
-    students (categoryYear, departmentID, firstName, lastName) 
+    students (userID, categoryYear, departmentID, firstName, lastName) 
 VALUES 
-    ('senior', 6, 'Flavio', 'Medina'),
-    ('senior', 6, 'Charles', 'Coleman'),
-    ('freshman', 7, 'Sean', 'Guyon'),
-    ('junior', 2, 'Will', 'Jacobs'),
-    ('junior', 3, 'David', 'Kalinowski'),
-    ('sophomore', 9, 'John', 'Doe'),
-    ('senior', 8, 'Jane', 'Smith');
+    (101, 'sophomore', 1, 'Will', 'Jacobs');
 
 -- Community Users
--- INSERT INTO    
---     community_users (userID, name) 
--- VALUES 
---     (107, 'Emma Kang'),
---     (108, 'Peter Parker'),
---     (109, 'Steve Rogers'),
---     (110, 'Tony Stark'),
---     (111, 'Jim Goods'),
---     (112, 'Denis Fire'),
---     (113, 'Elon Musk'),
---     (114, 'LeBron James'),
---     (115, 'Stephen Curry');
+INSERT INTO    
+    community_users (userID, name) 
+VALUES 
+    (102, 'Rochester Public Library');
 
 -- Projects
 INSERT INTO 
     projects (userID, name, description) 
 VALUES 
-    (100, 'Secure AI', 'Use AI to detect cyber threats'),
-    (101, 'Web Tools', 'Compare React and Vue performance'),
-    (102, 'Smart Campus', 'Link campus tech using IoT'),
-    (103, 'Stock ML', 'ML Model for stock prediction'),
-    (104, 'Green Chem', 'Make eco-friendly lab materials'),
-    (105, 'ASL App', 'App to teach ASL basics'),
-    (106, 'Robot Arm', 'AI for object sorting task');
+    (100, 'Health Database', 'Health Database for Strong Memorial Hospital');

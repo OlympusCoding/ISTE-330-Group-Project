@@ -12,7 +12,6 @@ import java.util.List;
 
 import types.StatsType;
 import types.enums.UserType;
-import types.user.UserParams;
 import types.user.userTypes.*;
 import utility.Encryption;
 
@@ -51,38 +50,7 @@ public class GUIFascade {
         }
 
         return false;
-    }
-
-    public boolean Register(UserParams params) {
-        // Create New User with all sub types etc
-        return dataLayer.addUser(params);
-    }
-
-    public boolean ChangeUserFullname(int userID, String firstName, String lastName) {
-        if (ChangeUserFirstName(userID, firstName)) {
-            if (ChangeUserLastname(userID, lastName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean ChangeUserFirstName(int userID, String newName) {
-        return dataLayer.updateFirstName(userID, newName);
-
-    }
-
-    public boolean ChangeUserLastname(int userID, String newName) {
-        return dataLayer.updateLastName(userID, newName);
-    }
-
-    public boolean ChangePassword(int userID, String oldPass, String newPass) {
-        String username = dataLayer.getUserUsername(userID);
-        if (dataLayer.checkPassword(username, oldPass)) {
-            return dataLayer.updatePassword(userID, newPass);
-        }
-        return false;
-    }
+    }    
 
     public boolean AddFacultyAbstract(int userId, String abstractText) {
         return dataLayer.addAbstract(userId, abstractText);
@@ -97,39 +65,9 @@ public class GUIFascade {
         return true;
     }
 
-    public boolean CreateFacultyInterest(int userID, String interestDescription) {
-        // Creates a new Faculty Interest
-        dataLayer.addInterest(userID, interestDescription);
-        return true;
-    }
-
-    public boolean UpdateFacultyInterest(int interestID, String description) {
-        // Updates an existing Faculty Interest
-
-        // Do we need to update interests?
-        dataLayer.updateInterest(interestID, description);
-        return true;
-    }
-
-    public boolean RemoveFacultyInterest(int userID, int interestID) {
-        // Removes Faculty Interest
-        dataLayer.removeInterest(userID, interestID);
-        return true;
-    }
-
-    public boolean CreateProject(int userId, String projectname, String description) {
-        return dataLayer.addProject(userId, projectname, description);
-    }
-
-    public boolean UpdateProjectName(int userId, String name) {
-        // Updates a Project
-
-        return dataLayer.updateProjectName(userId, name);
-    }
-
-    public boolean DeleteProject(int projectId) {
-        // Deletes a project
-        return dataLayer.removeProject(projectId);
+    public String getFacultyAbstract(int userId)
+    {
+        return dataLayer.getAbstract(userId);
     }
 
     public List<Faculty> SearchForFacultyByInterest(List<String> interests) {
