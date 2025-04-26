@@ -14,7 +14,7 @@ public class Searchbar extends JPanel {
 
     public Searchbar() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setBorder(new EmptyBorder(2, 8, 8, 8));
+        setBorder(new EmptyBorder(2, 8, 0, 8));
         setMaximumSize(new Dimension(
                 Integer.MAX_VALUE,
                 64));

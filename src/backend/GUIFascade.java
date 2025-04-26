@@ -138,6 +138,10 @@ public class GUIFascade {
         return dataLayer.searchForFacultyByInterest(interests);
     }
 
+    public List<Student> SearchForStudentByAbstract(String abstractText) {
+        return dataLayer.searchForStudentByAbstract(abstractText);
+    }
+
     public int GetUserID(String username) {
         return dataLayer.getUserID(username);
     }
@@ -153,5 +157,9 @@ public class GUIFascade {
 
     public StatsType GetStats() {
         return dataLayer.getStats();
+    }
+
+    public void CloseConnection() {
+        dataLayer.close();
     }
 }

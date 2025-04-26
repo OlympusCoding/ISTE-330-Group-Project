@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import types.StatsType;
+import types.enums.CategoryYear;
 import types.enums.UserType;
 import types.user.UserParams;
 import types.user.userTypes.Community;
@@ -102,20 +103,20 @@ public class DataLayer {
         String username = params.getUsername();
         String password = params.getPassword();
         String email = params.getEmail();
-        String type = params.getUserTypeInfo().getUserType();
+        UserType type = params.getUserType();
 
-        String sql = "INSERT into users(username, password, email, userType)";
+        String sql = "INSERT into users(username, password, email, userType) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.setString(3, email);
-            stmt.setString(4, type);
-            ResultSet rs = stmt.executeQuery();
+            stmt.setString(4, type.toString());
+            int result = stmt.executeUpdate();
 
-            if (rs.next()) {
-                if (type.equals("student")) {
+            if (result > 0) {
+                if (type.equals(UserType.student)) {
                     addStudent(params);
-                } else if (type.equals("faculty")) {
+                } else if (type.equals(UserType.faculty)) {
                     addFaculty(params);
                 } else {
                     addCommunity(params);
@@ -668,7 +669,7 @@ public class DataLayer {
 
     public List<Faculty> searchForFacultyByInterest(List<String> interests) {
         List<Faculty> toReturn = new ArrayList<Faculty>();
-        String sql = "SELECT f.firstName, f.lastName, f.buildingNum, f.officeNum, i.description FROM users as u JOIN faculty AS f on u.userID = f.userID JOIN user_interests AS ui ON u.userID = ui.userID JOIN interests AS i ON ui.interestID = i.interestID WHERE i.description LIKE ?";
+        String sql = "SELECT f.firstName, f.lastName, f.buildingNum, f.officeNum, i.description, u.email FROM users as u JOIN faculty AS f on u.userID = f.userID JOIN user_interests AS ui ON u.userID = ui.userID JOIN interests AS i ON ui.interestID = i.interestID WHERE i.description LIKE ?";
 
         for (String interest : interests) {
             try {
@@ -677,7 +678,8 @@ public class DataLayer {
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     toReturn.add(
-                            new Faculty(0, rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), ""));
+                            new Faculty(rs.getString("email"), rs.getString("firstName"), rs.getString("lastName"),
+                                    rs.getString("buildingNum"), rs.getString("officeNum")));
                 }
 
             } catch (SQLException e) {
@@ -686,6 +688,27 @@ public class DataLayer {
         }
 
         return toReturn;
+
+    }
+
+    public List<Student> searchForStudentByAbstract(String abstractString) {
+        List<Student> toReturn = new ArrayList<Student>();
+
+        String sql = "SELECT s.categoryYear, s.departmentID, s.firstName, s.lastName, u.email FROM students AS s JOIN users AS u USING (userID) JOIN user_interests AS ui USING (userID) JOIN interests AS i USING (interestID) WHERE LOCATE(i.description, ?) > 0";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, abstractString);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Student newStudent = new Student(CategoryYear.valueOf(rs.getString("categoryYear")),
+                        rs.getInt("departmentID"), rs.getString("email"), rs.getString("firstName"),
+                        rs.getString("lastName"));
+                toReturn.add(newStudent);
+            }
+            return toReturn;
+        } catch (SQLException e) {
+            System.out.println("There was an error with the SQL Statement: " + e.getMessage());
+            return null;
+        }
 
     }
 
@@ -699,11 +722,7 @@ public class DataLayer {
 
             if (rs.next()) {
                 facultyCount = rs.getInt("faculty_count");
-            }
-            if (rs.next()) {
                 studentCount = rs.getInt("student_count");
-            }
-            if (rs.next()) {
                 communityCount = rs.getInt("community_users_count");
             }
 

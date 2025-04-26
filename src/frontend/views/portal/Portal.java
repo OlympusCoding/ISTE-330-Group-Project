@@ -32,7 +32,7 @@ public class Portal extends JFrame {
             setTitle("Portal");
         }
 
-        setSize(800, 500);
+        setSize(800, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);

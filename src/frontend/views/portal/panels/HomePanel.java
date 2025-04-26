@@ -11,20 +11,29 @@ import java.awt.event.*;
 import backend.GUIFascade;
 import frontend.components.Searchbar;
 import frontend.components.Stats;
-import frontend.views.Register;
 import frontend.views.portal.Portal;
 import types.StatsType;
 import types.enums.UserType;
 import types.user.userTypes.Faculty;
+import types.user.userTypes.Student;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HomePanel extends JPanel {
+    private GUIFascade fascade;
+    private Portal parent;
+
+    private JButton clearButton;
+    private JPanel resultsPanel;
+    private JPanel resultsContainer;
+    private JSeparator separator;
+    private JScrollPane scrollPane;
 
     public HomePanel(Portal parent, int userID) {
-        GUIFascade fascade = parent.getFascade();
+        this.parent = parent;
+        this.fascade = parent.getFascade();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // Get User Type
@@ -50,16 +59,16 @@ public class HomePanel extends JPanel {
         add(stats);
 
         // Search label
-        String searchLabelTest = "";
+        String searchLabelText = "";
         if (userType.equals(UserType.faculty)) {
-            searchLabelTest = "Search for student by abstract:";
+            searchLabelText = "Search for student by abstract:";
         } else if (userType.equals(UserType.student)) {
-            searchLabelTest = "Search for faculty by interests:";
+            searchLabelText = "Search for faculty by interests:";
         } else {
-            searchLabelTest = "Search for student or faculty by interest:";
+            searchLabelText = "Search for student or faculty by interest:";
         }
 
-        JLabel searchLabel = new JLabel(searchLabelTest);
+        JLabel searchLabel = new JLabel(searchLabelText);
         searchLabel.setBorder(new EmptyBorder(16, 8, 2, 8));
         searchLabel.setFont(searchLabel.getFont().deriveFont(Font.BOLD, 14f));
         searchLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -77,17 +86,53 @@ public class HomePanel extends JPanel {
         JButton searchButton = searchbar.getSearchButton();
 
         // Results panel
-        JPanel resultsPanel = new JPanel();
-        resultsPanel.setLayout(new BoxLayout(resultsPanel, BoxLayout.Y_AXIS));
-        resultsPanel.setBorder(new EmptyBorder(2, 8, 8, 8));
-        resultsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        resultsPanel.setMaximumSize(new Dimension(
+        this.resultsContainer = new JPanel();
+        resultsContainer.setLayout(new BoxLayout(resultsContainer, BoxLayout.Y_AXIS));
+        resultsContainer.setBorder(new EmptyBorder(2, 8, 0, 8));
+        resultsContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
+        resultsContainer.setMaximumSize(new Dimension(
                 Integer.MAX_VALUE,
-                Integer.MAX_VALUE));
+                235));
+
+        this.resultsPanel = new JPanel();
+        this.resultsPanel.setLayout(new BoxLayout(this.resultsPanel, BoxLayout.Y_AXIS));
+        this.scrollPane = new JScrollPane(this.resultsPanel);
+        this.scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+        this.scrollPane.setMaximumSize(new Dimension(
+                Integer.MAX_VALUE,
+                235));
+        this.scrollPane.setPreferredSize(new Dimension(0, 235));
+
+        this.clearButton = new JButton(
+                new ImageIcon(getClass().getResource("/frontend/assets/images/clear.png")));
+        this.clearButton.setBackground(Color.decode("#272A2D"));
+        this.clearButton.setBorderPainted(false);
+        this.clearButton.setFocusPainted(false);
+
+        this.clearButton.setPreferredSize(new Dimension(32, 32));
+        this.clearButton.setMaximumSize(new Dimension(32, 32));
+        this.clearButton.setMinimumSize(new Dimension(32, 32));
+        this.clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resultsPanel.removeAll();
+                resultsContainer.removeAll();
+                resultsContainer.revalidate();
+                resultsContainer.repaint();
+            }
+        });
+
+        this.separator = new JSeparator(SwingConstants.HORIZONTAL);
+        this.separator.setForeground(Color.decode("#26282B"));
 
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resultsPanel.removeAll();
+                resultsContainer.removeAll();
+                resultsContainer.revalidate();
+                resultsContainer.repaint();
+
                 String searchText = searchField.getText().trim();
                 if (searchText.isEmpty() || searchText.equals("Search")) {
                     JOptionPane.showMessageDialog(parent, "Please enter a search term.", "Error",
@@ -98,37 +143,14 @@ public class HomePanel extends JPanel {
                 // Clear the search field
                 searchField.setText("Search");
 
+                // Check UserType and perform search accordingly
                 if (userType.equals(UserType.faculty)) {
-                    // Search for students by abstract
-                    JOptionPane.showMessageDialog(parent, "No students found with the given abstract.", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
+                    handleFacultySearch(searchText);
                 } else if (userType.equals(UserType.student)) {
-                    // Search for faculty by interests
-                    String[] interests = searchText.split(",");
-                    List<String> interestList = List.of(interests);
-                    List<Faculty> faculty = fascade.SearchForFacultyByInterest(interestList);
-                    if (faculty.isEmpty()) {
-                        JOptionPane.showMessageDialog(parent, "No faculty found with the given interests.", "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    resultsPanel.removeAll();
-                    for (Faculty fac : faculty) {
-                        JLabel facultyLabel = new JLabel(fac.getFirstName() + " " + fac.getLastName());
-                        facultyLabel.setFont(facultyLabel.getFont().deriveFont(Font.PLAIN, 14f));
-                        facultyLabel.setForeground(Color.WHITE);
-                        facultyLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-                        facultyLabel.setBorder(new EmptyBorder(4, 8, 4, 8));
-                        resultsPanel.add(facultyLabel);
-                    }
-                    resultsPanel.revalidate();
-                    resultsPanel.repaint();
-
+                    handleStudentSearch(searchText);
                 } else {
                     // Search for students or faculty by interest
-                    JOptionPane.showMessageDialog(parent, "No students or faculty found with the given intrest.",
+                    JOptionPane.showMessageDialog(parent, "NOT IMPLEMENTED YET",
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                     return;
@@ -138,9 +160,94 @@ public class HomePanel extends JPanel {
         });
 
         add(searchbar);
-        JScrollPane scrollPane = new JScrollPane(resultsPanel);
-        scrollPane.setBorder(new EmptyBorder(0, 8, 8, 8));
-        add(scrollPane);
+        add(resultsContainer);
+    }
 
+    private void handleStudentSearch(String searchText) {
+        String[] interests = searchText.split(",");
+        List<String> interestList = List.of(interests);
+        List<Faculty> faculty = fascade.SearchForFacultyByInterest(interestList);
+        if (faculty.isEmpty()) {
+            JOptionPane.showMessageDialog(parent, "No faculty found with the given interests.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        createUIComponents(searchText);
+
+        int index = 1;
+        for (Faculty fac : faculty) {
+            JButton facultyButton = new JButton(
+                    index + ": " + fac.getFirstName() + " " + fac.getLastName() + " - "
+                            + fac.getBuildingNum() + " - " + fac.getOfficeNum() + " - " + fac.getEmail());
+            facultyButton.setFont(facultyButton.getFont().deriveFont(Font.PLAIN, 14f));
+            facultyButton.setForeground(Color.WHITE);
+            facultyButton.setBackground(Color.decode("#202225"));
+            facultyButton.putClientProperty(FlatClientProperties.STYLE, "arc:16;");
+            facultyButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            facultyButton.setBorder(new EmptyBorder(4, 8, 4, 8));
+            this.resultsPanel.add(facultyButton);
+            index++;
+        }
+
+        resultsContainer.add(scrollPane);
+        resultsContainer.revalidate();
+        resultsContainer.repaint();
+
+    }
+
+    private void handleFacultySearch(String searchText) {
+        List<Student> students = fascade.SearchForStudentByAbstract(searchText);
+        if (students == null || students.isEmpty()) {
+            JOptionPane.showMessageDialog(parent, "No students found with the given abstract.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        createUIComponents(searchText);
+
+        int index = 1;
+        for (Student stu : students) {
+            JButton studentButton = new JButton(
+                    index + ": " + stu.getFirstName() + " " + stu.getLastName() + " - " + stu.getEmail());
+            studentButton.setFont(studentButton.getFont().deriveFont(Font.PLAIN, 14f));
+            studentButton.setForeground(Color.WHITE);
+            studentButton.setBackground(Color.decode("#202225"));
+            studentButton.putClientProperty(FlatClientProperties.STYLE, "arc:16;");
+            studentButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            studentButton.setBorder(new EmptyBorder(4, 8, 4, 8));
+            this.resultsPanel.add(studentButton);
+            index++;
+        }
+
+        resultsContainer.add(scrollPane);
+        resultsContainer.revalidate();
+        resultsContainer.repaint();
+    }
+
+    private void createUIComponents(String searchText) {
+        resultsPanel.removeAll();
+
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
+        headerPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+        headerPanel.setMaximumSize(new Dimension(
+                Integer.MAX_VALUE,
+                64));
+
+        JLabel resultsLabel = new JLabel("Results for search: " + searchText);
+        resultsLabel.setForeground(Color.decode("#6682FF"));
+        resultsLabel.setFont(resultsLabel.getFont().deriveFont(Font.BOLD, 14f));
+        headerPanel.revalidate();
+        headerPanel.repaint();
+
+        headerPanel.add(resultsLabel);
+        headerPanel.add(Box.createHorizontalGlue());
+        headerPanel.add(this.clearButton);
+
+        headerPanel.setVisible(true);
+        resultsContainer.add(headerPanel);
+        resultsContainer.add(Box.createVerticalStrut(8));
+        resultsContainer.add(separator);
     }
 }

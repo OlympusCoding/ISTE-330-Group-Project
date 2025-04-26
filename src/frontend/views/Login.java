@@ -60,8 +60,6 @@ public class Login extends JFrame implements ActionListener {
 
         /* Login Button */
         JPanel loginPanel = new JPanel(new BorderLayout());
-        loginPanel.setMinimumSize(new Dimension(200, 48));
-        loginPanel.setMaximumSize(new Dimension(200, 48));
         loginButton = new JButton("Login");
         loginButton.setFont(loginButton.getFont().deriveFont(Font.BOLD, 14f));
         loginButton.setBackground(Color.decode("#6682FF"));
@@ -69,31 +67,11 @@ public class Login extends JFrame implements ActionListener {
         loginButton.addActionListener(this);
         loginPanel.add(loginButton, BorderLayout.CENTER);
 
-        /* Register Instead */
-        JPanel registerPanel = new JPanel(new BorderLayout());
-        registerPanel.setBackground(Color.decode("#202225"));
-        JButton registerButton = new JButton("Create an Account");
-        registerButton.setFont(registerButton.getFont().deriveFont(Font.PLAIN, 13f));
-        registerButton.setBackground(Color.decode("#202225"));
-        registerButton.setForeground(Color.WHITE);
-        registerButton.setBorder(BorderFactory.createEmptyBorder());
-        registerPanel.add(registerButton, BorderLayout.SOUTH);
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Register register = new Register(fascade);
-                register.setVisible(true);
-                dispose();
-            }
-        });
-
         panel.add(usernamePanel);
         panel.add(Box.createRigidArea(new Dimension(0, 4)));
         panel.add(passwordPanel);
         panel.add(Box.createRigidArea(new Dimension(0, 4)));
         panel.add(loginPanel);
-        panel.add(Box.createRigidArea(new Dimension(0, 8)));
-        panel.add(registerPanel);
 
         add(panel);
         setVisible(true);
