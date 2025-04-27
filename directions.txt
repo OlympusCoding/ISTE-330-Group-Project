@@ -1,5 +1,35 @@
+Authors: Charles Coleman, Flavio Medina, Will Jacobs, Sean Guyon, David Kalinowski
+
 To run the application:
 
-    - SOURCE the sql script titled: GROUP_SQLDatabase.sql
-    - Run the GUIFascade File's Main Method and it will run through the main functionalities of the application
+    - SOURCE the sql script titled: GROUP_SQLDatabase.sql.
+    - Add the two .jar files located in the /lib folder to the JAVA classpath.
+    - Run the PresentationLayer.java MAIN method to start the application.
+
+    - Logins:
+        - Faculty Level Account
+            - Username: faculty 
+            - Password: password
+        - Student Level Account
+            - Username: student
+            - Password: password
+        - Community Level Account
+            - Username: community
+            - Password: password
+
+    ** Pages are able to be navigated using the sidebar on the left hand side of the window.
+    
+    In the faculty level account, you will have access to searching for students based on a provided abstract on the home page,
+    as well as adding, modifying, and removing the faculty members abstract from their account (entry) on the add page.
+
+    In the student level account, you will have access to searching for faculty members based on the interest provided.
+
+    In the community level account, you will have access to searching for both faculty and students based on a key word provided.
+
+    ** For all types of accounts, you will be able to see the stats section showing how many users are using the application, 
+    you are also able to look at the credits page, as well as logout of the account using the provided sidebar buttons.
+
+
+
+
     
