@@ -82,16 +82,6 @@ CREATE TABLE community_users (
     CONSTRAINT community_user_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Projects
-CREATE TABLE projects (
-    projectID INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    userID INT UNSIGNED NOT NULL,
-    name VARCHAR(50) NOT NULL DEFAULT '',
-    description VARCHAR(255) NOT NULL DEFAULT '',
-    PRIMARY KEY (projectID),
-    CONSTRAINT project_userID_FK FOREIGN KEY (userID) REFERENCES users(userID) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 -- ====================
 -- Insert:
 -- ====================
@@ -100,9 +90,9 @@ CREATE TABLE projects (
 INSERT INTO 
     users (username, password, email, userType) 
 VALUES 
-    ('jHabermas', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'jrhicsa@g.rit.edu', "Faculty"),  
-    ('wJacobs', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'whj3443@g.rit.edu', "Student"),
-    ('ROCLibrary', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'reference@rplmn.org', "Community");
+    ('faculty', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'faculty@rit.edu', "Faculty"),  
+    ('student', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'student@rit.edu', "Student"),
+    ('community', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'community@roc.gov', "Community");
 
 
 -- Interests
@@ -159,9 +149,3 @@ INSERT INTO
     community_users (userID, name) 
 VALUES 
     (102, 'Rochester Public Library');
-
--- Projects
-INSERT INTO 
-    projects (userID, name, description) 
-VALUES 
-    (100, 'Health Database', 'Health Database for Strong Memorial Hospital');
